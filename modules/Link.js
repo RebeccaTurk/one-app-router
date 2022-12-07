@@ -103,7 +103,19 @@ class Link extends React.Component {
 
     if (router) {
       // If user does not specify a `to` prop, return an empty anchor tag.
-      if (!to) { return <a {...props} ref={innerRef} /> }
+      if (!to) { 
+        return (
+          React.Children.forEach((child) => {
+            // if child is a customized anchor
+            // (still need to add this condition: ) or if child is a DLS <Anchor />
+            if (child.type.displayName === 'a') { 
+              <child {...props} ref={innerRef} />
+            } else {
+              <a {...props} ref={innerRef} />
+            }
+          })
+        )
+      }
 
       const toLocation = resolveToLocation(to, router)
       props.href = router.createHref(toLocation)
@@ -124,7 +136,16 @@ class Link extends React.Component {
       }
     }
 
-    return <a {...props} onClick={this.handleClick} ref={innerRef} />
+    // and same as L106-L118 except with the onClick
+    return (
+      React.Children.forEach((child) => {
+        if (child.type.displayName === 'a') { 
+          <child {...props} ref={innerRef} onClick={this.handleClick} />
+        } else {
+          <a {...props} ref={innerRef} onClick={this.handleClick} />
+        }
+      })
+    )
   }
 }
 

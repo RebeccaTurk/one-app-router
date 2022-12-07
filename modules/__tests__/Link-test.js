@@ -28,7 +28,9 @@ describe('A <Link>', () => {
 
   it('should not render unnecessary class=""', () => {
     render((
-      <Link to="/something" />
+      <Link to="/something">
+        <a>Hello World from anchor!</a>
+      </Link>
     ), node, () => {
       const a = node.querySelector('a')
       expect(a.hasAttribute('class')).toBe(false)
